@@ -1,0 +1,10 @@
+Blender 2.63 (sub 0) - www.blender.org, source file: 'robot.blend'
+property v means vertex {x, y, z}
+property n means normals {x, y, z}
+property u means uv coords {u, v}
+property d obsolete for now
+property c means vertex colors
+ 
+property ? means animation key frame
+property $ means fps
+property # means number of vertices per frame

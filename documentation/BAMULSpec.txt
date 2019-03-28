@@ -1,0 +1,166 @@
+DRAFT 0.1
+
+Workers are robots!
+If you want a worker to do some work, you'll have to program it to do so.
+
+Programming languange
+BAMUL <- Basic Artifical Mobile Unit Language
+
+Registers:
+
+Registers are memory slots used by the program to save values during execution.
+These can hold a single value each and are typically used by hardware
+actions or as input parameters for operators (see below).
+
+X and Y are "generic" registers and can be used for various things.
+I and J are also "generic" registers but typically used for index or iteration purposes.
+T is the target register and points out the AMU's current target.
+
+Commands:
+
+The AMU is controlled by a chain of commands. A command is a single
+action in the BAMUL code. There are two kinds of commands, described
+below, hardware actions and operators.
+
+In the code, each command is numbered from 0 and up. This can be
+usefull for certain commands (for example the G operator).
+
+Hardware actions:
+
+Wardware actions are the commands which the AMU will be able to issue
+in order to perform an action. It can be anything from movement to
+attacks.
+if the AMU is unable to perform the action, the AMU will do nothing
+during the cycles.
+
+Hardware actions do not require any further input, but may rely on
+registers for their function.
+
+Hardware actions take a certain time to perform, expressed in cycles.
+In the list below, cycles are listed in parenthesis ()
+1 cycle is roughly 1 second
+Example: move W will cost 5 cycles, that's a total of 5 seconds to
+move one square West
+
+(5)		W <- move west
+(5)		E <- move east
+(5)		N <- move north
+(5)		S <- move south
+(10)	D <- uses the drilling hardware, will drill though anything set
+		as target in T
+(4)		A <- analyze, will analyze everything within the square, the first
+		thing found will be stored in X. If called again, will move on to the
+		next material.
+(20)	B <- will perform a deep analysis of the square, trying to locate
+		rare materials. Will set X to material found or to 0 if nothing is
+		found.
+(10)	R <- repair targeted unit
+(5)		P <- will pick up target
+(5)		M <- Whatever the unit is carrying, will be moved to unit set as target in T
+(1)		X <- reads the X registry
+(1)		Y <- reads the Y registry
+(50)	C <- will enter construction mode on anything currently being
+		built in the square
+
+example:
+wwwww <- moves 5 squares west, at a total of 25 cycles time
+
+Operators:
+
+In addition to the hardware actions there are a number of operators
+that can be used in the code.
+Operators may require one or more input values, called parameters, and
+are written on the form <operator><parameter 1>(<parameter 2>).
+The result of an operation will be TRUE or FALSE (there are two exceptions).
+If the result is TRUE, the program will continue as normal.
+If the result is FALSE, the next command will be skipped (see examples below).
+
+Operators: (all examples assume X = 1 and Y = 0)
+Number in parenthesis specifies number of parameters.
+
+!(2) <- NOT, !XY is TRUE
+&(2) <- EQUALS, &XY is FALSE
+<(2) <- LESS THAN, <XY is FALSE
+>(2) <- GREATER THAN, >XY is TRUE
+=(2) <- Set value. The first parameter must be a register, the second
+either another register or a numeric value
++(2) <- Addition, +XY, +X10. The first parameter must be a register,
+the second either another register or a numeric value. Adds the value
+of the second parameter to the value in the register in the first
+parameter. Returns FALSE if the value is 0, else TRUE.
+-(2) <- Subtraction, -XY, -X10. The first parameter must be a
+register, the second either another register or a numeric value.
+Subtractss the value of the second parameter from the value in the
+register in the first parameter. Returns FALSE if the value is 0, else
+TRUE.
+:(1) <- Anchor. The parameter is any letter in the alphabet (A-Z) and
+specifies a label for this anchor.
+G(1) <- Jump. The parameter is a named Anchor. The program will jump
+to the anchor and keep running at that location.
+
+Unit types and materials:
+
+1 <- hostile unit
+2 <- friendly unit
+3 <- unknown unit
+4-10 <- reserved
+11 <- dirt
+12 <- water
+13 <- wood
+14 <- stone
+15-20 <- reserved
+21 <- granite
+22 <- coal
+23 <- copper
+24 <- iron
+25 <- silver
+26-30 <- reserved
+
+examples:
+
+Move 3 squares west, 2 squares south
+WWWSS
+
+Analyze and jump go north if nothing was found
+B!X0GEN:E
+
+Basic loop
+=I10:A<do things>-I1GA
+
+
+Make deep analysis and drill the first thing that is found
+B&X0GE=TXD:E (using anchor)
+
+Analyze and drill 20x20 squares
+=I20:A=Y20:BNB!X0GC=TXD:C-Y1GBE=Y20:DS-Y1GD-I1GA
+
+Break down:
+=I20				Set I to 20
+:A					Set label 'A'
+	=Y20			Set Y to 20
+	:B				Set label 'B'
+		N			Go north
+		B			Analyze
+		!X0			Check if X is not 0
+			GC		If TRUE, jump to 'C'
+		=TX			Set T (target) to what The analysis found (X)
+		D			Drill
+		:C			Set label 'C'
+		-Y1			Subtract 1 from Y
+			GB		If Y not 0 (if above returned TRUE) we jump back to label 'B'
+	E				Go east
+	=Y20			Set Y to 20 (again)
+	:D				Set label 'D'
+		S			Go south
+		-Y1			Subtract 1 from Y
+			GD		If Y is not 0 jump back to 'D'
+	-I1				Subtract 1 from I
+	GA				If I is not 0 jump back to 'A'
+
+The above program walks north and analyzes every square. If it finds
+anything it will drill it up before proceeding.
+After going north 20 times, it will go east ones and then back south 20 times.
+This is repeated 20 times.
+The result is that the AMU analyzes and drills an 20x20 area to the
+north and east of the starting position.
+Total nr of commands: 21.

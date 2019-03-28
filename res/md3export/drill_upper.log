@@ -1,0 +1,22 @@
+######################BEGIN######################
+Converted quads in UV map of u_torso to tris.
+Exporting UV texture coordinates for u_torso
+Exporting u_torso
+Header Information
+Ident: IDP3
+Version: 15
+Name: drill
+Flags: 0
+Number of Frames: 101
+Number of Tags: 3
+Number of Surfaces: 1
+Number of Skins: 0
+Offset Frames: 108
+Offset Tags: 5764
+Offset Surfaces: 39700
+Offset end: 349092
+Total Shaders: 1
+Total Triangles: 200
+Total Vertices: 376
+MD3 saved to C:\Users\mickeman\workspace\AnthroposOnline\res\md3export\drill_upper.md3
+Elapsed 2.10303 seconds

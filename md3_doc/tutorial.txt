@@ -1,0 +1,69 @@
+BLENDER AND PLUGIN INSTALLATION! MUST BE THESE VERSIONS OR IT WILL NOT WORK
+
+1. Get Blender 2.62 32bit for windows.
+2. copy the io_export_md3.py script into the addon folder YOU MUST USE THIS FILE, NO OTHER FILE
+
+EXPORTING MD3 FROM BLENDER
+
+Buildings:
+
+1. The object you wish to export must be renamed to be "l_legs"
+2. Create two new objects, with one polygon each, place them somewhere hidden, call them "u_torso" and "h_head"
+3. Create two empty objects, without any polygons, call them "tag_head" and "tag_torso"
+4. You must UV map all objects, "l_legs", "u_torso" and "h_head"
+5. Do any animation you want
+6. Select "l_legs", "tag_torso" and export MD3. Set Scale as 0.5 and set name as buildingX, where X is the building number. Name the file
+buildingX_lower.md3 (example building1_lower.md3, building2_lower.md3)
+7. Select "u_torso", "tag_torso", "tag_head" and export. Set scale as 0.5 and name it buildingX with filename buildingX_upper.md3
+8. Select "h_head", "tag_head" and export. Set scale as 0.5 and name it buildingX with filename buildingX_head.md3
+
+9. Create a .skin file for each md3 file, example building1_lower.skin
+in _lower.skin:
+tag_torso,
+l_legs,buildingX/texturefilename.bmp
+
+_upper.skin:
+tag_head,
+tag_torso,
+u_torso,buildingX/texturefilename.bmp
+u_head,buildingX/texturefilename.bmp
+
+_head.skin:
+tag_head,
+h_head,buildingX/texturefilename.bmp
+
+10. create an animation file called buildingX_animation.cfg: (this will probably have to change for buildings)
+
+sex	m
+
+// first frame, num frames, looping frames, frames per second
+
+footsteps boot
+
+0	1	0	1		// BOTH_DEATH1
+0	1	0	1		// BOTH_DEAD1
+0	1	0	1		// BOTH_DEATH2
+0	1	0	1		// BOTH_DEAD2
+0	1	0	1		// BOTH_DEATH3
+0	1	0	1		// BOTH_DEAD3
+
+0	1	0	1		// TORSO_ATTACK
+0	1	0	1		// TORSO_STAND
+0	1	0	1		// TORSO_GESTURE
+0	1	0	1		// TORSO_ATTACK2
+0	1	0	1		// TORSO_DROP
+0	1	0	1		// TORSO_RAISE
+0	1	0	1		// TORSO_STAND2
+
+0	1	0	1		// LEGS_RUN
+0	1	0	1		// LEGS_JUMP
+0	1	0	1		// LEGS_IDLE
+0	1	0	1		// LEGS_WALKCR
+0	1	0	1		// LEGS_WALK
+0	1	0	1		// LEGS_BACK
+0	1	0	1		// LEGS_SWIM
+0	1	0	1		// LEGS_LAND
+0	1	0	1		// LEGS_JUMPB
+0	1	0	1		// LEGS_LANDB
+0	1	0	1		// LEGS_IDLECR
+0	1	0	1		// LEGS_TURN

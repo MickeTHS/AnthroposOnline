@@ -1,0 +1,80 @@
+Workers are robots!
+If you want a worker to do some work, you'll have to program it to do so.
+
+Programming languange
+BAMUL <- Basic Artifical Mobile Unit Language
+
+hardware actions:
+
+hardware actions are the commands which the AMU will be able to issue in order to perform an action. It can be anything from movement to attacks.
+if the AMU is unable to perform the action, the AMU will do nothing during the cycles.
+
+examples:
+
+1. Move 3 squares west, 2 squares south
+3@w;2@s;
+
+2. Make deep analysis and drill the first thing that is found
+B!0@T=XD!0@;;
+
+
+iterations:
+while condition differs from 0 and false, will do the block
+
+example:
+5@w; <- move west 5 times
+
+Cycles are defined in parenthesis ()
+1 cycle is roughly 1 second
+example: move W will cost 5 cycles, thats a total of 5 seconds to move one square West
+
+(5) 	W <- move west
+(5) 	E <- move east
+(5) 	N <- move north
+(5) 	S <- move south
+(10) 	D <- uses the drilling hardware, will drill though anything set as target in T
+(4) 	A <- analyze, will analyze everything within the square, the first thing found will be stored in X. If called again, will move on to the next material.
+(20) 	B <- will perform a deep analysis of the square, trying to locate rare materials. Will set X to material found. Returns 0 if nothing is found.
+(10) 	R <- repair targeted unit
+(5) 	P <- will pick up target
+(5) 	M <- Whatever the unit is carrying, will be moved to unit set as target in T
+(1) 	X <- reads the X registry
+(1) 	Y <- reads the Y registry
+(50)	C <- will enter construction mode on anything currently being built in the square
+
+operators: (all examples assume X = 1 and Y = 0)
+! <- NOT, X!Y is TRUE
+& <- EQUALS, X&Y is FALSE
+< <- LESS THAN, X<Y is FALSE
+> <- GREATER THAN, X>Y is TRUE
+
+
+Unit types and materials:
+1 <- hostile unit
+2 <- friendly unit
+3 <- unknown unit
+4-10 <- reserved
+11 <- dirt
+12 <- water
+13 <- wood
+14 <- stone
+15-20 <- reserved
+21 <- granite
+22 <- coal
+23 <- copper
+24 <- iron
+25 <- silver
+26-30 <- reserved
+
+
+example:
+wwwww <- moves 5 squares west, at a total of 25 cycles time
+
+
+
+alias:
+an alias is a number of commands, bundled together to be executed sequentially and may be called as an iteration
+
+a:ww4@e;;aaa <- a is assigned to move west twice and then east 4 times, this will be called 3 times
+is equal to
+a:ww4@e;;3@a;
